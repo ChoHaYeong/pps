@@ -7,6 +7,7 @@ public class BOJ7569 {
     static boolean[][][] visited;
     static int[][][] tomatos;
     static int[][][] dist;
+    static int days = 0;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -64,8 +65,10 @@ public class BOJ7569 {
             System.out.println(0);
         else if(!complete)
             System.out.println(-1);
-        else
+        else{
+
             System.out.println(days);
+        }
         //return count;
     }
 
@@ -74,7 +77,6 @@ public class BOJ7569 {
         int[] dy = {0, -1, 0, 1, 0, 0};
         int[] dz = {0, 0, 0, 0, 1, -1};
         Queue<Position2> q = new LinkedList<>();
-        int days = 0;
 
         visited[x][y][z] = true;
         q.add(new Position2(x, y, z));
