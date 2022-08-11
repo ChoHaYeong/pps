@@ -10,6 +10,9 @@ public class BOJ14500 {
     static int[][] paper;
     static boolean[][] visited;
     static int[] arr = new int[4];
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, -1, 0, 1};
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -27,18 +30,26 @@ public class BOJ14500 {
             }
         }
 
-        for(int i=0; i<N; i++) {
-            for(int j=0; j<M; j++) {
-                dfs(0, i, j);
-            }
-        }
+        // for(int i=0; i<N; i++) {
+        //     for(int j=0; j<M; j++) {
+        //         dfs(0, i, j);
+        //     }
+        // }
 
+        // for(int i=0; i<N; i++) {
+        //     for(int j=0; j<M; j++) {
+        //         bfs(i, j);
+        //     }
+        // }
+        
         for(int i=0; i<N; i++) {
             for(int j=0; j<M; j++) {
+                visited[i][j] = true; //이거 안해도 되긴 하는데 시간이 오래 걸림 
+                dfs(0, i, j);
+                visited[i][j] = false; //
                 bfs(i, j);
             }
         }
-        
 
         System.out.println(max);
     }
@@ -50,16 +61,7 @@ public class BOJ14500 {
         if(curr == 4) {
             int sum = 0 ;
             for(int a: arr) {
-               // System.out.print(a + " ");
                 sum += a;
-            }
-
-            if(sum == 20) {
-                for(int a: arr) {
-                    System.out.print(a + " ");
-                }
-
-            System.out.println(" ===================> sum : " + sum + " x : " + x + " y : " + y);
             }
 
             if(max < sum)
@@ -68,130 +70,148 @@ public class BOJ14500 {
             return ;
         }
 
-        for(int i=x; i<N; i++) {
-            for(int j=y; j<M; j++) {
-                if(!visited[i][j]) {
-                    visited[i][j] = true;
-                    arr[curr] = paper[i][j];
-                    dfs(curr+1, i, j);
-                    visited[i][j] = false;
-                }
-            }
+        for(int i=0; i<4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            if(nx < 0 || ny < 0 || nx >=N || ny >= M) continue;
+            else if(visited[nx][ny]) continue;
+            visited[nx][ny] = true;
+            arr[curr] = paper[nx][ny];
+            dfs(curr+1, nx, ny);
+            visited[nx][ny] = false;
         }
     }
 
     static void bfs(int x, int y) {
-        Queue<Position> queue = new LinkedList<>();
-
-        int[] x1 = {0, 0, 1};
-        int[] y1 = {1, 2, 1};
-        //paper[x][y] + paper[x][y+1] + paper[x][y+2] + paper[x+1][y+1]
-        //굳이 queue에 넣고 할 필요가 없음
-
-        int[] x2 = {1, 2, 1};
-        int[] y2 = {0, 0, -1};
-
-        int[] x3 = {0, 0, -1};
-        int[] y3 = {-1, -2, -1};
-
-        int[] x4 = {-1, -2, -1};
-        int[] y4 = {0, 0, 1};
-
-        int sum = 0;
-
-        queue.add(new Position(x, y));
-
-       // while(!queue.isEmpty()) {
-            Position out = queue.poll();
-            sum += paper[out.x][out.y];
-            //System.out.println("1)sum : "+ sum);
-            for(int i=0; i<3; i++) {
-                int nx = out.x + x1[i];
-                int ny = out.y + y1[i];
-                if(nx <0 || ny < 0 || nx >= N || ny >= M) continue;
-                else{
-                    queue.add(new Position(nx, ny));
-                    sum += paper[nx][ny];
-
-                   // System.out.println("1)sum => "+ sum);
-                }
-            }
-       // }
-
-        if(max < sum){
-            System.out.println("1) max : "+ max + " sum : " + sum);
-            max = sum;
+        if(x+1 < N && y+2 < M){
+            if( max < paper[x][y] + paper[x][y+1] + paper[x][y+2] + paper[x+1][y+1])
+                max = paper[x][y] + paper[x][y+1] + paper[x][y+2] + paper[x+1][y+1];
         }
-
-        sum = 0;
-        queue.add(new Position(x, y));
-
-       // while(!queue.isEmpty()) {
-            out = queue.poll();
-            sum += paper[out.x][out.y];
-
-            for(int i=0; i<3; i++) {
-                int nx = out.x + x2[i];
-                int ny = out.y + y2[i];
-                if(nx <0 || ny < 0 || nx >= N || ny >= M) continue;
-                else{
-                    queue.add(new Position(nx, ny));
-                    sum += paper[nx][ny];
-                }
-            }
-       // }
-
-        if(max < sum){
-            System.out.println("2) max : "+ max + " sum : " + sum);
-            max = sum;
+        if(x+2 < N && y > 0){
+            if( max < paper[x][y] + paper[x+1][y] + paper[x+2][y] + paper[x+1][y-1])
+                max = paper[x][y] + paper[x+1][y] + paper[x+2][y] + paper[x+1][y-1];
         }
-        queue.add(new Position(x, y));
-        sum = 0;
-
-       // while(!queue.isEmpty()) {
-            out = queue.poll();
-            sum += paper[out.x][out.y];
-
-            for(int i=0; i<3; i++) {
-                int nx = out.x + x3[i];
-                int ny = out.y + y3[i];
-                if(nx <0 || ny < 0 || nx >= N || ny >= M) continue;
-                else{
-                    queue.add(new Position(nx, ny));
-                    sum += paper[nx][ny];
-                }
-            }
-       // }
-
-        if(max < sum){
-            System.out.println("3) max : "+ max + " sum : " + sum);
-            max = sum;
+        if(x > 0 && y-1 > 0){
+            if( max < paper[x][y] + paper[x][y-1] + paper[x][y-2] + paper[x-1][y-1])
+                max = paper[x][y] + paper[x][y-1] + paper[x][y-2] + paper[x-1][y-1];
         }
-
-        queue.add(new Position(x, y));
-        sum = 0;
-
-        //while(!queue.isEmpty()) {
-            out = queue.poll();
-            sum += paper[out.x][out.y];
-
-            for(int i=0; i<3; i++) {
-                int nx = out.x + x4[i];
-                int ny = out.y + y4[i];
-                if(nx <0 || ny < 0 || nx >= N || ny >= M) continue;
-                else{
-                    queue.add(new Position(nx, ny));
-                    sum += paper[nx][ny];
-                }
-            }
-        //}
-
-        if(max < sum){
-            System.out.println("4) max : "+ max + " sum : " + sum);
-            max = sum;
+        if(x-1 > 0 && y+1 < M){
+            if( max < paper[x][y] + paper[x-1][y] + paper[x-2][y] + paper[x-1][y+1])
+                max = paper[x][y] + paper[x-1][y] + paper[x-2][y] + paper[x-1][y+1];
         }
-
 
     }
+
+    // static void bfs(int x, int y) {
+    //     Queue<Position> queue = new LinkedList<>();
+
+    //     int[] x1 = {0, 0, 1};
+    //     int[] y1 = {1, 2, 1};
+    //     //paper[x][y] + paper[x][y+1] + paper[x][y+2] + paper[x+1][y+1]
+    //     //굳이 queue에 넣고 할 필요가 없음
+
+    //     int[] x2 = {1, 2, 1};
+    //     int[] y2 = {0, 0, -1};
+
+    //     int[] x3 = {0, 0, -1};
+    //     int[] y3 = {-1, -2, -1};
+
+    //     int[] x4 = {-1, -2, -1};
+    //     int[] y4 = {0, 0, 1};
+
+    //     int sum = 0;
+
+    //     queue.add(new Position(x, y));
+
+    //    // while(!queue.isEmpty()) {
+    //         Position out = queue.poll();
+    //         sum += paper[out.x][out.y];
+    //         //System.out.println("1)sum : "+ sum);
+    //         for(int i=0; i<3; i++) {
+    //             int nx = out.x + x1[i];
+    //             int ny = out.y + y1[i];
+    //             if(nx <0 || ny < 0 || nx >= N || ny >= M) continue;
+    //             else{
+    //                 queue.add(new Position(nx, ny));
+    //                 sum += paper[nx][ny];
+
+    //                // System.out.println("1)sum => "+ sum);
+    //             }
+    //         }
+    //    // }
+
+    //     if(max < sum){
+    //         max = sum;
+    //     }
+
+    //     sum = 0;
+    //     queue.add(new Position(x, y));
+
+    //    // while(!queue.isEmpty()) {
+    //         out = queue.poll();
+    //         sum += paper[out.x][out.y];
+
+    //         for(int i=0; i<3; i++) {
+    //             int nx = out.x + x2[i];
+    //             int ny = out.y + y2[i];
+    //             if(nx <0 || ny < 0 || nx >= N || ny >= M) continue;
+    //             else{
+    //                 queue.add(new Position(nx, ny));
+    //                 sum += paper[nx][ny];
+    //             }
+    //         }
+    //    // }
+
+    //     if(max < sum){
+    //         max = sum;
+    //     }
+    //     queue.add(new Position(x, y));
+    //     sum = 0;
+
+    //    // while(!queue.isEmpty()) {
+    //         out = queue.poll();
+    //         sum += paper[out.x][out.y];
+
+    //         for(int i=0; i<3; i++) {
+    //             int nx = out.x + x3[i];
+    //             int ny = out.y + y3[i];
+    //             if(nx <0 || ny < 0 || nx >= N || ny >= M) continue;
+    //             else{
+    //                 queue.add(new Position(nx, ny));
+    //                 sum += paper[nx][ny];
+    //             }
+    //         }
+    //    // }
+
+    //     if(max < sum){
+    //         max = sum;
+    //     }
+
+    //     queue.add(new Position(x, y));
+    //     sum = 0;
+
+    //     //while(!queue.isEmpty()) {
+    //         out = queue.poll();
+    //         sum += paper[out.x][out.y];
+
+    //         for(int i=0; i<3; i++) {
+    //             int nx = out.x + x4[i];
+    //             int ny = out.y + y4[i];
+    //             if(nx <0 || ny < 0 || nx >= N || ny >= M) continue;
+    //             else{
+    //                 queue.add(new Position(nx, ny));
+    //                 sum += paper[nx][ny];
+    //             }
+    //         }
+    //     //}
+
+    //     if(max < sum){
+    //         max = sum;
+    //     }
+
+
+    // }
+
     
 }
