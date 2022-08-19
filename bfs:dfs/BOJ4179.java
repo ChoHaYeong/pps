@@ -201,9 +201,9 @@ public class BOJ4179{
         }
 
 
-        if(!flag)
-            System.out.println("IMPOSSIBLE");
-        else 
+        // if(!flag)
+        //     System.out.println("IMPOSSIBLE");
+        // else 
             System.out.println(min);
 
 
@@ -240,6 +240,8 @@ public class BOJ4179{
              
         }
 
+        System.out.println("IMPOSSIBLE");
+
     }
 
     static void bfsJ() {
@@ -257,7 +259,7 @@ public class BOJ4179{
                   int ny = out.y + dy[i];
   
                   if(nx < 0 || ny < 0 || nx >= R || ny >= C) {
-                      flag = true;
+                     // flag = true;
                       min = dist[out.x][out.y] + 1;
                       return ;
                   }

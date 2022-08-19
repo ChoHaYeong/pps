@@ -8,6 +8,7 @@ public class BOJ7569 {
     static int[][][] tomatos;
     static int[][][] dist;
     static int days = 0;
+    static Queue<Position2> q = new LinkedList<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -30,7 +31,11 @@ public class BOJ7569 {
                     tomatos[i][j][k] = Integer.parseInt(st.nextToken());  //  정수 1은 익은 토마토, 정수 0 은 익지 않은 토마토, 정수 -1은 토마토가 들어있지 않은 칸
 
                     if(tomatos[i][j][k] == 0) 
-                        flag = false; //익지 않은 것이 하나라도 있음 
+                        flag = false; //익지 않은 것이 하나라도 있음
+                    if(tomatos[i][j][k] == 1){
+                        q.add(new Position2(i, j, k)); 
+                        visited[i][j][k] = true;
+                    }
                 }
             }
         }
@@ -42,7 +47,7 @@ public class BOJ7569 {
         for(int i=0; i< H; i++) {
             for(int j=0; j< N; j++) {
                 for(int k=0; k<M; k++) {
-                    if(tomatos[i][j][k] == 1 && !visited[i][j][k]){
+                    if(tomatos[i][j][k] == 1){
                         bfs(i, j, k); 
                     }
                 }
@@ -72,32 +77,32 @@ public class BOJ7569 {
         //return count;
     }
 
-    static void bfs(int x, int y, int z) {
+    static void bfs(int h, int x, int y) {
+        int[] dh = {0, 0, 0, 0, 1, -1};
         int[] dx = {-1, 0, 1, 0, 0, 0};
         int[] dy = {0, -1, 0, 1, 0, 0};
-        int[] dz = {0, 0, 0, 0, 1, -1};
-        Queue<Position2> q = new LinkedList<>();
+        // Queue<Position2> q = new LinkedList<>();
 
-        visited[x][y][z] = true;
-        q.add(new Position2(x, y, z));
+        // visited[x][y][z] = true;
+        // q.add(new Position2(x, y, z));
 
         while(!q.isEmpty()) {
             Position2 out = q.poll();
 
             for(int i=0; i<6; i++) {
+                int nh = out.h + dh[i];
                 int nx = out.x + dx[i];
                 int ny = out.y + dy[i];
-                int nz = out.z + dz[i];
 
-                if(nx< 0 || ny< 0 || nz< 0 || nx >= H || ny>= N || nz >= M ) continue;
-                else if( visited[nx][ny][nz] || tomatos[nx][ny][nz] == -1 ) continue;
+                if(nh< 0 || nx< 0 || ny< 0 || nh >= H || nx>= N || ny >= M ) continue;
+                else if( visited[nh][nx][ny] || tomatos[nh][nx][ny] == -1 ) continue;
                 else {
                    // System.out.println(nx + " ," + ny + " , " + nz);
-                    visited[nx][ny][nz] = true;
-                    tomatos[nx][ny][nz] = 1;
-                    q.add(new Position2(nx, ny, nz));
-                    dist[nx][ny][nz] = dist[out.x][out.y][out.z] + 1;
-                    days = dist[nx][ny][nz];
+                    visited[nh][nx][ny] = true;
+                    tomatos[nh][nx][ny]  = 1;
+                    q.add(new Position2(nh, nx, ny));
+                    dist[nh][nx][ny]  = dist[out.h][out.x][out.y] + 1;
+                    days = dist[nh][nx][ny] ;
                 }
             }
 
@@ -107,13 +112,15 @@ public class BOJ7569 {
 }
 
 class Position2{
+
+    int h;
     int x;
     int y;
-    int z;
     
-    Position2(int x, int y, int z) {
+    Position2(int h, int x, int y) {
+
+        this.h = h;
         this.x = x;
         this.y = y;
-        this.z = z;
     }
 }
