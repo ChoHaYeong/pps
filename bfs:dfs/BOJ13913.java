@@ -5,7 +5,7 @@ public class BOJ13913 {
     static int N, K;
 
     static boolean[] visited;
-    static int[] dist;
+    static int[] dist, parent;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -15,12 +15,19 @@ public class BOJ13913 {
 
         visited = new boolean[100001];
         dist = new int[100001];
-
-        bfs(N);
+        parent = new int[100001];
+        
+        if(N == K){
+            System.out.println(0);
+            System.out.println(N);
+        }
+        else
+            bfs(N);
     }
 
     static void bfs(int x) {
         Queue<Integer> queue = new LinkedList<>();
+
         int[] arr = new int[1000001];
         queue.add(x);
         visited[x] = true;
@@ -45,32 +52,24 @@ public class BOJ13913 {
 
                     if(dist[next] != 0)
                         dist[next] = Math.min(dist[next], dist[out]+1);
-                       else 
-                        dist[next] = dist[out] + 1;       
-
-                    arr[dist[next]] = next;
-                    System.out.println("idx: " + dist[next] + " 의 값 : " + arr[dist[next]]);
-
-                    if(K == next){
+                    else 
+                        dist[next] = dist[out] + 1; 
+                        
+                    parent[next] = out; //parent[next]로 이동하기 직전 위치
+                    
+                    if(next == K)
                         System.out.println(dist[next]);
-                        for(int idx=0; idx<dist[next]; idx++)
-                            System.out.println(arr[idx]);
-                        return ;
-                    }
-
-                   // System.out.println(dist[next] + " / " + next + " 그리고 " + dist[out] + " / " + out);      
-                   /**
-                    * 
-                    이동 경로는 parent 배열을 사용합니다.
-
-                    현재 위치 A 에서 다음 경로로 가는 방법은 3개여서 저장하기가 애매합니다.
-
-                    그런데 현재 위치 A 로 이동했던 출발지는 1개입니다.
-
-                    따라서 parent 배열에는 이전 경로를 저장한 뒤, 최종 도착지인 K 부터 N 까지 다시 거슬러 올라가면 됩니다.
-                     ㅇ*/    
                 }
             }
+        }
+        LinkedList<Integer> queue2 = new LinkedList<>();
+        queue2.add(K);
+        while(queue2.peek() != N) {
+            queue2.addFirst(parent[queue2.peek()]);
+        }
+
+        for(int q:queue2) {
+            System.out.print(q + " ");
         }
     }
 }
