@@ -1,16 +1,31 @@
 import java.util.*;
 import java.io.*;
 
+class Point implements Comparable<Point>{
+    int x, y, cnt;
+
+    Point(int x, int y, int cnt) {
+        this.x = x;
+        this.y = y;
+        this.cnt = cnt;
+    }
+
+    @Override
+    public int compareTo(Point p) {
+        return this.cnt - p.cnt;
+    }
+}
+
 public class BOJ1261 {
     static int[][] maze, dist;
-    static int M, N, cnt;
+    static int M, N;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         M = Integer.parseInt(st.nextToken());
         N = Integer.parseInt(st.nextToken());
-        cnt = 0;
+        //cnt = 0;
 
         maze = new int[N][M];
         dist = new int[N][M];
@@ -22,7 +37,7 @@ public class BOJ1261 {
         for(int i=0; i<N; i++) {
             String str = br.readLine();
             for(int j=0; j<M; j++) {
-                maze[i][j] = Integer.parseInt(Character.toString(str.charAt(i)));
+                maze[i][j] = Integer.parseInt(Character.toString(str.charAt(j)));
             }
         }
 
@@ -31,22 +46,23 @@ public class BOJ1261 {
     }
 
     static void bfs(int x, int y) {
-        Queue<Position> queue = new LinkedList<>();
-        Queue<Position> result = new LinkedList<>();
+        PriorityQueue<Point> queue = new PriorityQueue<>();
+        
 
         int[] dx = {-1, 0, 1, 0};
         int[] dy = {0, -1, 0, 1};
 
-        queue.add(new Position(x, y));
+        queue.offer(new Point(x, y, 0));
         dist[x][y] = 0;
 
         while(!queue.isEmpty()) {
-            Position out= queue.poll();
+            Point out= queue.poll();
+           // System.out.println(out.x + " , " + out.y + " => " + out.cnt);
 
             if(out.x == N-1 && out.y == M-1){
 
-                 System.out.println(cnt);
-                System.out.println(dist[out.x][out.y] + 1);
+                System.out.println(out.cnt);
+                //System.out.println(dist[out.x][out.y] + 1);
                 return ;
             }
 
@@ -55,19 +71,21 @@ public class BOJ1261 {
                 int ny = out.y + dy[i];
 
                 if(nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
-                else if(dist[nx][ny] >= 0) continue;
-                else {
-                    queue.add(new Position(nx, ny));
-                    dist[nx][ny] = dist[out.x][out.y] + 1;
-
-                    if(maze[nx][ny] == 1)
-                        cnt++;
+                if(dist[nx][ny] > -1) continue;
+                if(maze[nx][ny] == 1) {
+                    queue.offer(new Point(nx, ny, out.cnt+1));
+                    //System.out.println(nx + " , " + ny + " => " + (out.cnt+1));
+                } 
+                if(maze[nx][ny] == 0) {
+                    queue.offer(new Point(nx, ny, out.cnt));
                 }
+
+                dist[nx][ny] = dist[out.x][out.y] + 1;
 
             }
         }
 
-        System.out.println(cnt);
+        //System.out.println(cnt);
     }
 
 }

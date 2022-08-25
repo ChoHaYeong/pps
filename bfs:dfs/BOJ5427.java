@@ -42,10 +42,12 @@ public class BOJ5427 {
                     if(building[j][k] == '*') {
                         queue.add(new Position(j, k));
                         visited[j][k] = true;
+                        fireDist[j][k] = 1;
                     }
-                    if(building[j][k] == '@') {
+                    else if(building[j][k] == '@') {
                         queue2.add(new Position(j, k));
                         visited2[j][k] = true;
+                        dist[j][k] = 1;
                     }
                 }
             }
@@ -61,6 +63,11 @@ public class BOJ5427 {
             // }
 
             escape();
+
+            // while(!queue.empty())
+            //     queue.pop();
+            // while(!queue2.empty())
+            //     queue2.pop();
 
           
 
@@ -78,16 +85,16 @@ public class BOJ5427 {
                 int ny = out.y + dy[i];
 
                 if(nx < 0 || ny < 0 || nx >= h || ny >= w) continue;
-                else if(visited[nx][ny] || building[nx][ny] == '#') continue;
-                else {
+                if(visited[nx][ny] || building[nx][ny] == '#') continue;
+                //else {
                     queue.add(new Position(nx, ny));
                     visited[nx][ny] = true;
 
-                    if(fireDist[nx][ny] != 0)
-                        fireDist[nx][ny] = Math.min(fireDist[nx][ny], fireDist[out.x][out.y] + 1);
-                    else
+                    // if(fireDist[nx][ny] != 0)
+                    //     fireDist[nx][ny] = Math.min(fireDist[nx][ny], fireDist[out.x][out.y] + 1);
+                    // else
                         fireDist[nx][ny] = fireDist[out.x][out.y] + 1;
-                }
+                //}
             }
         }
     }
@@ -104,19 +111,28 @@ public class BOJ5427 {
                 int ny = out.y + dy[i];
 
                 if(nx < 0 || ny < 0 || nx >= h || ny >= w) {
+                    for(int j=0; j<h; j++) {
+                        for(int k=0; k<w; k++) {
+                            System.out.print(fireDist[i][j]  + " ");
+                        }
+                        System.out.println();
+                    }
                     System.out.println(dist[out.x][out.y]+1);
                     flag = true;
                     return ;
                 }
-                else if(visited2[nx][ny] || building[nx][ny] == '#') continue;
+                if(visited2[nx][ny] || building[nx][ny] == '#') continue;
                // else if(fireDist[nx][ny] == -1) continue;
-               else if(fireDist[nx][ny] != 0 && fireDist[nx][ny] <= dist[out.x][out.y]+1) continue;
-                else {
+                if(fireDist[nx][ny] != 0 && fireDist[nx][ny] <= dist[out.x][out.y]+1) continue;
+               // else {
                     queue2.add(new Position(nx, ny));
                     visited2[nx][ny] = true;
                     dist[nx][ny] = dist[out.x][out.y] + 1;
-                }
+                //}
             }
+
+            if(flag)
+                break;
 
         }
 

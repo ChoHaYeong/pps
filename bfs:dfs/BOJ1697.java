@@ -3,7 +3,6 @@ import java.util.*;
 
 public class BOJ1697 {
     static int N, K, C  = 0;
-    static int[] visited;
     static boolean[] visited;
     static Queue<Integer> queue = new LinkedList<>();
 
