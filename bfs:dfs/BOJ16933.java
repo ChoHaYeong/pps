@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.util.ArrayDeque;
 
 class Wall {
     int x, y; //현재 map의 위치
@@ -16,7 +17,7 @@ class Wall {
 
 public class BOJ16933 {
     static int N, M, K;
-    static int[][] map;
+    static char[][] map;
     static int[][][][] dist;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,13 +27,13 @@ public class BOJ16933 {
         M = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
 
-        map = new int[N][M];
+        map = new char[N][M];
         dist = new int[N][M][K+1][2];
 
         for(int i=0; i<N; i++) {
             String str = br.readLine();
             for(int j=0; j<M; j++){
-                map[i][j] = Integer.parseInt(Character.toString(str.charAt(j)));
+                map[i][j] = str.charAt(j);
             }
         }
 
@@ -40,7 +41,8 @@ public class BOJ16933 {
     }
 
     static void bfs(int x, int y) {
-        ArrayDeque<Wall> queue = new ArrayDeque<>();
+        boolean flag = false;
+        Queue<Wall> queue = new ArrayDeque<>();
         int[] dx = {-1, 0, 1, 0};
         int[] dy = {0, -1, 0, 1};
 
@@ -52,6 +54,7 @@ public class BOJ16933 {
 
             if(out.x == N-1 && out.y == M-1) {
                 System.out.println(dist[out.x][out.y][out.cnt][out.day]);
+                flag = true;
                 return ;
             }
 
@@ -61,7 +64,7 @@ public class BOJ16933 {
 
                 if(nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
 
-                if(map[nx][ny] == 0) {
+                if(map[nx][ny] == '0') {
                     int nt = 1-out.day;
                     if(dist[nx][ny][out.cnt][nt] > 0) continue;
 
@@ -70,7 +73,7 @@ public class BOJ16933 {
                 } else { //벽일 때
 
                     if(K == out.cnt) continue;
-                    if(out.day == 1) { // 낮이면
+                    if(out.day == 1) { // 낮이면 벽 부수고 이동할 수 있음
 
                         int nt = 1-out.day;
                         int cnt = out.cnt + 1;
@@ -79,21 +82,23 @@ public class BOJ16933 {
                         dist[nx][ny][cnt][nt] = dist[out.x][out.y][out.cnt][out.day] + 1;
                         queue.add(new Wall(nx, ny, cnt, nt));
 
-                    } else if(out.day == 0 ) { //밤이면
-                        int nt = 1-out.day;
-                        if(dist[out.x][out.y][out.cnt][nt] > 0) continue;
-
-                        dist[out.x][out.y][out.cnt][nt] = dist[out.x][out.y][out.cnt][out.day] + 1 ;
-                        queue.add(new Wall(out.x, out.y, out.cnt, nt));
-                    }
-
+                    } 
                     //queue.add(new Wall(nx, ny, out.cnt+1, nt));
 
                 }
             }
-        }
 
-        System.out.println(-1);
+            if(out.day == 0 ) { //밤이면 벽 부술 수 없고, 그 자리에 머무르기 
+                int nt = 1-out.day;
+                if(dist[out.x][out.y][out.cnt][nt] > 0) continue;
+
+                dist[out.x][out.y][out.cnt][nt] = dist[out.x][out.y][out.cnt][out.day] + 1 ;
+                queue.add(new Wall(out.x, out.y, out.cnt, nt));
+            }
+
+        }
+        if(!flag)
+            System.out.println(-1);
         return ;
     }
 }
