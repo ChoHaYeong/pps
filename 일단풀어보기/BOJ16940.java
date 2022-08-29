@@ -65,7 +65,7 @@ public class BOJ16940 {
 
         boolean flag = true;
         for(int i=1; i<=N; i++) {
-            System.out.println(result[i] + " " + order[i]);
+            //System.out.println(result[i] + " " + order[i]);
             if(result[i] != order[i]){
                 System.out.println(0);
                 flag = false;
