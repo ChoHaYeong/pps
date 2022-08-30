@@ -20,7 +20,7 @@ public class BOJ2004 {
         int ncount =0, rcount=0, nrcount= 0;
 
         while(n >= 5) {
-            ncount += n/5;
+            ncount += (n/5);
             n /= 5;
         }
 
