@@ -20,6 +20,8 @@ public class BOJ11054 {
         D[1] = 1;
         int max = 1;
 
+
+        //i를 기준으로 오른쪽으로 감소하는 길이 구하기 
         for(int i=1; i<=n; i++) { //D[i] = i가 기준이 되었을 때, 가장 긴 바이토닉 수열의 길이 
             D[i] = 1; 
             //D[n-i] = 1;
@@ -32,21 +34,6 @@ public class BOJ11054 {
             }
 
             //System.out.println(i + " -> " + D[i]);
-
-        }
-        //오른쪽에서 왼쪽으로 구하기 
-        for(int i=n; i>=1; i--) { //D[i] = i가 기준이 되었을 때, 가장 긴 바이토닉 수열의 길이 
-            rD[i] = 1; 
-            //D[n-i] = 1;
-
-            for(int j=n; j>i; j--){
-              //  D[j] = 1;
-                if(arr[j] < arr[i] && rD[i] < rD[j]+1){
-                    rD[i] = rD[j] +1;
-                }
-            }
-
-            //System.out.println(i + " -> " + rD[i]);
 
         }
 
