@@ -39,6 +39,8 @@ public class BOJ14503 {
 
         while(!queue.isEmpty()) {
             Mirror out = queue.poll();
+            System.out.println(out.cnt);
+            boolean flag = false;
 
             int direction = out.dir ; //(out.dir + 3)%4; //out.dir = 0이면 direction은 3
             for(int i=0; i<4; i++) {
@@ -49,6 +51,7 @@ public class BOJ14503 {
                 if(nx < 0 || nx >=N || ny < 0 || ny >= M) continue;
                 if(!visited[nx][ny] && space[nx][ny] != 1) { //방문 안함 (= 아직 청소 안됨) 그리고 벽이 아님 
                     visited[nx][ny] = true;
+                    flag = true;
                     queue.add(new Mirror(nx, ny, out.cnt+1, direction)); //청소된 구역 + 1
                 }
                 // else if(visited[nx][ny] && space[nx][ny] != 1) {
@@ -58,18 +61,18 @@ public class BOJ14503 {
             }
             
             
-            //if((visited[out.x-1][out.y] || space[out.x-1][out.y] ==1 ) && (visited[out.x][out.y-1] || space[out.x][out.y-1] ==1 )  && ( visited[out.x+1][out.y] || space[out.x+1][out.y] ==1 )  && (visited[out.x][out.y+1]  || space[out.x][out.y+1] ==1 ) ) {
+            if(!flag) {
                 // 네 방향 모두 청소가 이미 되어있거나 벽인 경우에는
                 //뒤도 벽인경우 
-                int nd = (our.dir + 2) % 4;
+                int nd = (out.dir + 2) % 4;
                 int bx = out.x + dx[nd];
                 int by = out.y + dy[nd];
-                System.out.println(out.x + " , " + out.y + " dir " + out.dir + "  / 나아갈 곳 (" + nx + " ," +ny+ " ) 후진할 곳 (" + bx + ", " + by + " )"  );
-                if( nx >= 0 && nx <N && ny >= 0 && ny < M && space[bx][by] != 1)  { //바라보는 방향을 유지한 채로 한 칸 후진을 하고 2번으로 돌아간다.
+                //System.out.println(out.x + " , " + out.y + " dir " + out.dir + "  / 나아갈 곳 (" + nx + " ," +ny+ " ) 후진할 곳 (" + bx + ", " + by + " )"  );
+                if( bx >= 0 && bx <N && by >= 0 && by < M && space[bx][by] != 1)  { //바라보는 방향을 유지한 채로 한 칸 후진을 하고 2번으로 돌아간다.
                     visited[bx][by] = true;
                     queue.add(new Mirror(bx, by, out.cnt, out.dir)); //방향을 유지한채로, 청소되는 구역이 추가되는 것은 아님
                 }
-            //}
+            }
         }
 
     }

@@ -18,6 +18,7 @@ class Point implements Comparable<Point>{
 
 public class BOJ1261 {
     static int[][] maze, dist;
+    static boolean[][] visited;
     static int M, N;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,10 +30,11 @@ public class BOJ1261 {
 
         maze = new int[N][M];
         dist = new int[N][M];
+        visited = new boolean[N][M];
 
-        for(int j=0; j<dist.length; j++) {
-            Arrays.fill(dist[j], -1);
-        }
+        // for(int j=0; j<dist.length; j++) {
+        //     Arrays.fill(dist[j], -1);
+        // }
 
         for(int i=0; i<N; i++) {
             String str = br.readLine();
@@ -53,7 +55,8 @@ public class BOJ1261 {
         int[] dy = {0, -1, 0, 1};
 
         queue.offer(new Point(x, y, 0));
-        dist[x][y] = 0;
+        visited[x][y] = true;
+        //dist[x][y] = 0;
 
         while(!queue.isEmpty()) {
             Point out= queue.poll();
@@ -71,16 +74,35 @@ public class BOJ1261 {
                 int ny = out.y + dy[i];
 
                 if(nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
-                if(dist[nx][ny] > -1) continue;
-                if(maze[nx][ny] == 1) {
-                    queue.offer(new Point(nx, ny, out.cnt+1));
-                    //System.out.println(nx + " , " + ny + " => " + (out.cnt+1));
-                } 
-                if(maze[nx][ny] == 0) {
-                    queue.offer(new Point(nx, ny, out.cnt));
-                }
+                //if(dist[nx][ny] > -1) continue;
+                int cnt = out.cnt;
+                if(maze[nx][ny] == 1) cnt++;
 
-                dist[nx][ny] = dist[out.x][out.y] + 1;
+                if(!visited[nx][ny]) { //방문 안했을 때
+                    // if(maze[nx][ny] == 1) {
+                    //     visited[nx][ny] = true;
+                    //     dist[nx][ny] = out.cnt+1;
+                    //     queue.offer(new Point(nx, ny, out.cnt+1));
+                    //     //System.out.println(nx + " , " + ny + " => " + (out.cnt+1));
+                    // } 
+                    // if(maze[nx][ny] == 0) {
+                    //     visited[nx][ny] = true;
+                    //     dist[nx][ny] = out.cnt;
+                    //     queue.offer(new Point(nx, ny, out.cnt));
+                    // }
+
+                    visited[nx][ny] = true;
+                    dist[nx][ny] = cnt;
+                    queue.offer(new Point(nx, ny, cnt));
+                }
+                else if(visited[nx][ny] && dist[nx][ny] > cnt) {
+                    visited[nx][ny] = true;
+                    dist[nx][ny] = cnt;
+                    queue.offer(new Point(nx, ny, cnt));
+                }
+                
+
+                //dist[nx][ny] = dist[out.x][out.y] + 1;
 
             }
         }

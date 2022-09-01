@@ -12,7 +12,7 @@ class Mirror implements Comparable<Mirror>{
     }
 
     @Override
-    public int compareTo(Mirror m) {
+    public int compareTo(Mirror m) {6
         return this.cnt - m.cnt;
     }
 }
