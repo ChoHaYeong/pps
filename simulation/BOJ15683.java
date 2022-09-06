@@ -34,14 +34,14 @@ public class BOJ15683 {
                     //company[i][0] ~ company[i][j]까지 확인
                     //같은 cctv가 꼭 같은방향일 필요도 없음 ...
 
-                    System.out.println(i + "," + (M-i));
+                    //System.out.println(i + "," + (M-i));
                     for(int k=i+1; k<=M-1; k++) { //1번 cctv의 1번 방향
                         if(company[i][k] == 6)
                             break;
                         count++;
                     }
 
-                    System.out.println(j + "," + (N-1));
+                    //System.out.println(j + "," + (N-1));
                     for(int k=j+1; k<=N-1; k++) {//1번 cctv의 2번 방향
                         if(company[k][j] == 6)
                             break;
@@ -59,6 +59,8 @@ public class BOJ15683 {
                             break;
                         count4++;
                     }
+
+                    System.out.println(count + " " + count2 + " " + count3 + " " + count4);
 
                 } 
                 
@@ -88,11 +90,21 @@ public class BOJ15683 {
                     }
                 }
 
+                //System.out.println(count + " " + count2 + " " + count3 + " " + count4);
+
+                count = 0;
+                count2 = 0;
+                count3 = 0;
+                count4 = 0;
+
+
+
+
 
             }
         }
 
-        System.out.println(count + " " + count2 + " " + count3 + " " + count4);
+//        System.out.println(count + " " + count2 + " " + count3 + " " + count4);
         System.out.println(ccount + " " + ccount2 );
 
 
