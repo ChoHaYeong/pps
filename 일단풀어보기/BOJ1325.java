@@ -39,8 +39,10 @@ public class BOJ1325 {
         //    System.out.print(i + " : " );
 
             visited = new boolean[N+1];
-            dfs(i, i);
-            visited[i] = true;
+            bfs( i);
+
+            max = Math.max(max, D[i]);
+            //visited[i] = true;
             //D[i] = depth;
           //  System.out.println();
             //Arrays.fill(visited, false);
@@ -50,9 +52,9 @@ public class BOJ1325 {
         //     if(D[i] == max) System.out.print(i + " ");
         // }
 
-        for(int i=1; i<=N; i++){
-            max = Math.max(max, D[i]);
-        }
+        // for(int i=1; i<=N; i++){
+        //     max = Math.max(max, D[i]);
+        // }
 
         StringBuilder sb = new StringBuilder();
         for(int i=1; i<=N; i++){
@@ -63,23 +65,31 @@ public class BOJ1325 {
         System.out.println(sb.toString());
     }
 
-    static void dfs(int curr, int x) {
+    // static void dfs(int curr, int x) {
+    //     for(int l : list.get(x)) {
+    //        // System.out.print(l + " ,");
+    //         if(!visited[l]) {
+    //             visited[l] = true;
+    //             dfs(curr, l);
+    //             D[curr]++;
+    //             //visited[l] = false;
+    //         }
+    //     }
+    // }
 
-      //  System.out.print(x + " ,");
-        // if(list.get(x).size() == 0) {
-        //     max = Math.max(max, curr);
-        //     depth = curr;
-        //     //System.out.println("curr : " +curr);
-        //     return ;
-        // }
-       // System.out.print(x + " ,");
-        for(int l : list.get(x)) {
-           // System.out.print(l + " ,");
-            if(!visited[l]) {
-                visited[l] = true;
-                dfs(curr, l);
-                D[curr]++;
-                //visited[l] = false;
+    static void bfs(int x) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(x);
+        visited[x] = true;
+
+        while(!queue.isEmpty()) {
+            int out = queue.poll();
+            for(int l : list.get(out)) {
+                if(!visited[l]) {
+                    visited[l] = true;
+                    queue.add(l);
+                    D[x]++;
+                }
             }
         }
     }

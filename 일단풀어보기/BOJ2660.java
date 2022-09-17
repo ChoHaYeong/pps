@@ -6,24 +6,25 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class BOJ2660 {
     static ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>();
-    static boolean[] visited;
-    static int N, min = Integer.MAX_VALUE;
-    static List<Integer> candidate = new LinkedList<>();
+    static int[] depth, candidate;
+    static int N, min = Integer.MAX_VALUE, max = 0;
+   //static List<Integer> candidate = new LinkedList<>();
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine()); //회원 수
-        visited = new boolean[N+1];
+        candidate = new int[N+1];
 
         for(int i=0; i<N+1; i++)
             list.add(new ArrayList<>());
 
         //int to, from;
         //StringTokenizer st = new StringTokenizer(br.readLine());
-        while(true ) {
+        while(true) {
 
             StringTokenizer st = new StringTokenizer(br.readLine());
             int to = Integer.parseInt(st.nextToken());
@@ -36,42 +37,41 @@ public class BOJ2660 {
         }
 
         for(int i=1; i<N+1; i++) {
-            dfs(0, 0, i);
+            depth = new int[N+1]; //depth배열 초기화
+           // min = Integer.MAX_VALUE; //최소임.. 거리값 초기화
+            bfs(i);
+            candidate[i] = max;
 
-            for(int j=1; j<N+1; j++) visited[j] = false;
-            //visited 방문여부 초기화하기
+            //System.out.println(candidate[i]);
         }
+        int boss = Integer.MAX_VALUE ;
+        for(int i =1; i<=N; i++ ){
+            boss = Math.min(boss, candidate[i]);
+        }
+        List<Integer> l = new LinkedList<>();
+        for(int i =1; i<=N; i++ )
+            if(boss == candidate[i]) l.add(i);
 
-        System.out.println(min);
+        System.out.println(boss + " " + l.size());
+        for(int ll : l)
+            System.out.print(ll + " ");
     }
 
-    static void dfs(int curr, int depth, int x) {
-        //System.out.println("curr " + curr);
-        if(curr == N-1) {
-            System.out.println("min " + min + " , x " + x + " , depth " + depth);
-            if(min > depth){
-                min = depth;
+    static void bfs(int x) {
+        max = 0;
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(x);
 
-                candidate = new LinkedList<>(); 
-                candidate.add(x);
-                //list초기화하고 새로 넣기
+        while(!queue.isEmpty()) {
+            int out = queue.poll();
+            for(int l: list.get(out)) {
+                if(depth[l] == 0) {
+                    queue.add(l);
+                    depth[l] = depth[out] + 1;
+                    if(l != x)
+                        max = Math.max(max, depth[l]);
+                }
             }
-            if(min == depth){
-                candidate.add(x);
-            }
-
-            return ;
         }
-        visited[x] = true;
-        for(int l : list.get(x)) {
-            if(!visited[l]) {
-                visited[l] = true;
-                dfs(curr+1, depth, l);
-
-                //depth++;
-                visited[l] = false;
-            }  else depth++;
-        }
-
     }
 }
