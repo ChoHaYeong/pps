@@ -1,3 +1,4 @@
+
 package cp연습_BF;
 
 import java.io.BufferedReader;
@@ -8,8 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class BOJ14888 {
-    static int N, max = 0, min = Integer.MAX_VALUE;
+public class BOJ15658 {
+    static int N, max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
     static int[] a;
     static char[] c, n_c;
 

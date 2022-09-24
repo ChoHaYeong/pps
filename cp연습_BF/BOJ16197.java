@@ -40,27 +40,31 @@ public class BOJ16197 {
                 }
             }
         }
-        go(fx, fy, sx, sy, 0);
-        if(!flag) System.out.println(-1);
-        else System.out.println(cnt);
+       // go(fx, fy, sx, sy, 0);
+        // if(cnt == Integer.MAX_VALUE) System.out.println(-1);
+        // else System.out.println(cnt);
+        // if(!flag) System.out.println(-1);
+        // else System.out.println(cnt);
+        System.out.println(go(fx, fy, sx, sy, 0));
     }
 
-    static void go(int fx, int fy, int sx, int sy, int curr) {
-
-        if(isBound(fx, fy) || isBound(sx, sy)) { //(isBound(fx, fy) && !isBound(sx, sy)) || (!isBound(fx, fy) && isBound(sx, sy))
+    static int go(int fx, int fy, int sx, int sy, int curr) {
+        //System.out.println("??" + fx  + " , " + fy + " / " + sx + " , " + sy);
+        if((isBound(fx, fy) || isBound(sx, sy)) ) { //(isBound(fx, fy) && !isBound(sx, sy)) || (!isBound(fx, fy) && isBound(sx, sy))
             //동전 하나만 벗어남
-            cnt = Math.min(cnt, curr);
-            return ;
+            //cnt = Math.min(cnt, curr);
+            return curr;
         }  
-        
-        if((!isBound(fx, fy) && !isBound(sx, sy))|| curr > 10) {
-            System.out.println(isBound(fx, fy));
-            System.out.println(isBound(sx, sy));
-            System.out.println(curr);
+        // if(curr > 10) {
+        //     flag = false;
+        //     return -1;
+        // }
+        if((!isBound(fx, fy) && !isBound(sx, sy)) || curr > 10) {
             flag = false;
-            return ;
-        }
+            return -1;
 
+        }
+        int ans = -1;
         for(int i=0; i<4; i++)  {
             int nfx = fx + dx[i];
             int nfy = fy + dy[i];
@@ -69,23 +73,28 @@ public class BOJ16197 {
 
              
 
-            if(isBound(nfx, nfy) && isBound(nsx, nsy)){
-                if(board[nfx][nfy] == '#') {
+            if(isBound(nfx, nfy) && board[nfx][nfy] == '#' ){
+                
                     nfx = fx;
                     nfy = fy;
                 }
     
-                if(board[nsx][nsy] == '#') {
+            if(isBound(nsx, nsy) && board[nsx][nsy] == '#') {
                     nsx = sx;
                     nsy = sy;
                 }
+
+               // go(nfx, nfy, nsx, nsy, curr+1);
+                int temp = go(nfx, nfy, nsx, nsy, curr+1);
+                if(temp == -1) continue;
+                if(ans == -1 || ans > temp) ans = temp;
+
             }
 
-            go(nfx, nfy, nsx, nsy, curr+1);
 
+            return ans;
             
 
-        }
     }
 
     static boolean isBound(int x, int y ) {
