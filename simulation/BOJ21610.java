@@ -64,6 +64,13 @@ public class BOJ21610 {
             //모든 구름이 di방향으로 si칸 이동한다 + 각 구름에서 비가 내려 구름이 있는 칸의 바구니에 저장된 물의 양이 1 증가한다.
             cloudMoves(l);
             //구름이 모두 사라진다 (= list 초기화)
+            // System.out.println("구름의 상태 1. =========== ");
+            // for(int i=0; i<N; i++) {
+            //     for(int j=0; j<N; j++) {
+            //         System.out.print(cloud[i][j] + " ");
+            //     }
+            //     System.out.println();
+            // }
             // for(int i=0; i<N; i++) {
             //     for(int j=0; j<N; j++) {
             //         if(cloud[i][j] == 1)
@@ -109,6 +116,14 @@ public class BOJ21610 {
             //     System.out.println();
             // }
 
+            // System.out.println("방문 상태 =========== ");
+            // for(int i=0; i<N; i++) {
+            //     for(int j=0; j<N; j++) {
+            //         System.out.print(visited[i][j] + " ");
+            //     }
+            //     System.out.println();
+            // }
+
             //바구니에 저장된 물의 양이 2 이상인 모든 칸에 구름이 생기고, 물의 양이 2 줄어든다. 이때 구름이 생기는 칸은 3에서 구름이 사라진 칸이 아니어야 한다.
 
             for(int i=0; i<N; i++) {
@@ -148,7 +163,7 @@ public class BOJ21610 {
         //     }
         // }
 
-        
+
 
         System.out.println(sum);
         
@@ -188,8 +203,8 @@ public class BOJ21610 {
 
             //System.out.println(nx + " , " + ny);
             //if(cloud[l.x][l.y] != 2)
-            //     cloud[l.x][l.y] = 0; //구름이 이동했기 때문에 원래 위치의 구름은 사라진다. 
-            // cloud[nx][ny] = 1;
+            //cloud[l.x][l.y] = 0; //구름이 이동했기 때문에 원래 위치의 구름은 사라진다. (애초에 구름 만들었다고 원래 위치를 1로 설정하진 않았잖아 ?)
+            cloud[nx][ny] = 1;
             visited[nx][ny] = true;
 
             //각 구름에서 비가 내려 구름이 있는 칸의 바구니에 저장된 물의 양이 1 증가한다.

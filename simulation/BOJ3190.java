@@ -3,151 +3,93 @@ package simulation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class BOJ3190 {
-    static int[][] arr ;
-    static class Dir {
-        int time;
-        char dir;
-        Dir(int time, char dir) {
+    static int N, K, L;
+    static int[][] arr; //1은 사과 2는 뱀
+    static Deque<Info> deque = new ArrayDeque<>();
+    static class Info{
+        int x, y, time;
+        Info(int x, int y, int time) {
             this.time = time;
-            this.dir = dir;
-        }
-    }
-
-    static class Position {
-        int x, y;
-        Position(int x, int y) {
             this.x = x;
             this.y = y;
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    static class Rot{
+        int time; char dir;
+        Rot(int time, char dir) {
+            this.time = time;
+            this.dir = dir;
+        }
+    }
+
+    //동 남 서 북
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
+
+
+    public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N =Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
+        K = Integer.parseInt(br.readLine());
         arr = new int[N][N];
-        int K = Integer.parseInt(br.readLine());
         for(int i=0; i<K; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int x = Integer.parseInt(st.nextToken());
-            int y = Integer.parseInt(st.nextToken());
-            arr[x-1][y-1] = 1; //사과가 놓여져있음
+            int r = Integer.parseInt(st.nextToken())-1;
+            int c = Integer.parseInt(st.nextToken())-1;
+            arr[r][c] = 1;
         }
-        int L = Integer.parseInt(br.readLine());
-        Dir[] dir = new Dir[L];
 
+        List<Rot> list = new ArrayList<>();
         for(int i=0; i<L; i++) {
+
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int x = Integer.parseInt(st.nextToken());
-            char y = st.nextToken().charAt(0);
-            dir[i] = new Dir(x, y);
+            int second = Integer.parseInt(st.nextToken());
+            char dir = st.nextToken().charAt(0);
+
+            list.add(new Rot(second, dir));
         }
-        Position head = new Position(0, 0); //머리의 위치
-        int idx = 0;
+
+
         int time = 0;
-        int curr_dir = 1; //0: 북, 1: 동, 2: 남, 3: 서
-        int len = 1;
-        while(idx < L) {
-            while( time < dir[idx].time) {
-                int nx = 0;
-                int ny = 0;
+        deque.add(new Info(0, 0, time));
+        arr[0][0] = 2;
+        while(true) {
 
-                int tailx = 0;
-                int taily = 0;
-                System.out.println("방향 " + curr_dir + "위치 " + head.x + " , " + head.y);
-                if(curr_dir == 1){
-    
-                    nx = head.x;
-                    ny = head.y+1;
+            int k = 0;
+            //1초 후의 이동지를 구한다. 뱀의 머리에서 방향만큼 이동한 곳이다.
+            Info out = deque.peekFirst();
+            int nx = out.x + dx[k];
+            int ny = out.y + dy[k];
 
-                    tailx = nx;
-                    taily = ny-len;
-                }
-                if(curr_dir == 2){
-    
-                    nx = head.x+1;
-                    ny = head.y;
+            time++;
 
-                    tailx = nx-len;
-                    taily = ny;
-                }
-                if(curr_dir == 3){
-    
-                    nx = head.x-1;
-                    ny = head.y;
+            if(nx < 0 || ny < 0 || nx >= N || ny >= N || arr[nx][ny] == 2) break; //위치가 범위를 넘어가거나 뱀 자기자신이면 그만한다.
 
-                    tailx = nx+len;
-                    taily = ny;
-                }
-                if(curr_dir == 4){
-    
-                    nx = head.x;
-                    ny = head.y-1;
+            arr[nx][ny] = 2; //이동지에 머리 위치시킨다.
+            deque.addFirst(new Info(nx, ny, time)); //deque에 넣는다.
 
-                    tailx = nx;
-                    taily = ny+len;
-                }
-
-                if(nx <0 || ny < 0 || nx >= N || ny >= N ) {
-                    System.out.println("1 end"+ nx + " , " + ny);
-                    System.out.println(time);
-                    return ; //벽에 닿은 것임 
-                }
-                if(tailx <0 || taily < 0 || tailx >= N || taily >= N ) {
-
-                    System.out.println("2 end" + tailx + " , " + taily);
-                    System.out.println(time);
-                    return ; //벽에 닿은 것임 
-                }
-                if(arr[nx][ny] == 2 ) {
-
-                    System.out.println("3 end");
-                    System.out.println(time);
-                    return ; //자기 몸에 닿은 것임
-                }
-    
-                arr[head.x][head.y] = 2; //현제 벰이 있는 위치
-                len++;
-                if(arr[nx][ny] == 1) {// 다음칸이 사과이면
-                    arr[nx][ny] = 2;
-                    //len++;
-                } else { //사과가 아니면
-                    arr[nx][ny] = 2;
-                    System.out.println(nx + " , " + ny  + " 그리고 len " + len);
-                    arr[tailx][taily] = 0; //몸 길이를 줄여서 꼬리가 위치한 칸 비움 (꼬리가 위치한 칸은 이게 아님 .. 으악)
-                    len--;
-                }
-                head = new Position(nx, ny);
-                time++;
-
-                System.out.println();
-                for(int i=0; i<N; i++){
-                    for(int j=0; j<N; j++) {
-                        System.out.print(arr[i][j]) ;
-                    }
-                    System.out.println();
-                }
+            if(arr[nx][ny] != 1) { //이동하련ㄴ 곳에 사과가 없으면
+                Info p = deque.pollLast();
+                arr[p.x][p.y] = 0; //꼬리가 위치한 곳은 빈칸
+                arr[nx][ny] = 2;
             }
-            //방향 회전해주어야함
-            System.out.println(dir[idx].time + "초 , 방향 회전");
-            //이 때 뱀도 이동해야함
-            if(dir[idx].dir == 'L')
-                curr_dir = (curr_dir+3)%4; //왼쪽으로 90도 회전
-            if(dir[idx].dir == 'D')
-                curr_dir = (curr_dir+1)%4; //오른쪽으로 90도 회전
-            idx++;
-        }
 
-
-        for(int i=0; i<N; i++){
-            for(int j=0; j<N; j++) {
-                System.out.print(arr[i][j]) ;
+            if(list.size() >0 && time == list.get(0).time) {
+                if(list.get(0).dir == 'L')
+                    k = (k+3) % 4;
+                if(list.get(0).dir == 'D') 
+                    k = (k+1) % 4;
+                
+                list.remove(0);
             }
-            System.out.println();
         }
 
         System.out.println(time);
+
+
     }
 }
