@@ -16,21 +16,18 @@ public class BOJ2294 {
             coin[i] = Integer.parseInt(br.readLine());
 
         int[] D = new int[k+1];
-        Arrays.fill(D, Integer.MAX_VALUE);
+        Arrays.fill(D, -1);
         D[0] = 0;
-
-        for(int i=1; i<=k; i++) {
-            for(int j=1; j<=n; j++) {
-                if(i - coin[j] >= 0 && D[i-coin[j]] != Integer.MAX_VALUE) {
-                    if(D[i] == -1 || D[i] > D[i-coin[j]] +1 )
-                        D[i] = D[i-coin[j]] + 1;
+        for(int i=1; i<=n; i++) {
+            for(int j=1; j<=k; j++) {
+                if(j - coin[i] >= 0 && D[j-coin[i]] != -1 ) {
+                    //if(D[j-coin[i]] == -1) break;
+                    if(D[j] == -1 || D[j] > D[j-coin[i]]+1) D[j] = D[j-coin[i]]+1;
                 }
-                //System.out.println(i + " ) " + D[i]);
             }
         }
 
-        if(D[k] == Integer.MAX_VALUE) System.out.println(-1);
-        else System.out.println(D[k]);
+        System.out.println(D[k]);
 
     }
 }

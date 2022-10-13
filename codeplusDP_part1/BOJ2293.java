@@ -19,11 +19,9 @@ public class BOJ2293 {
 
         int[] D = new int[k+1];
         D[0] = 1;
-        for (int j=1; j<=n; j++) {
-            for(int i=1; i<=k; i++) {
-                if(i - coin[j] >= 0)
-                    D[i] += D[i-coin[j]];
-              //  System.out.println(i + " ) " + D[i]);
+        for(int i=1; i<=n; i++) {
+            for(int j=1; j<=k; j++) {
+                if(j - coin[i] >= 0) D[j] += D[j -coin[i]];
             }
         }
 
