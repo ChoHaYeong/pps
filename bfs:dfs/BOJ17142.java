@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class BOJ17141 {
+public class BOJ17142 {
     static int N, M, ans = -1;
     static int[][] lab, newMap, n_arr, dist;
     static boolean[] visited;
@@ -23,7 +23,7 @@ public class BOJ17141 {
             for(int j=0; j<N; j++){
                 lab[i][j] = Integer.parseInt(st.nextToken()); 
                 if(lab[i][j] == 2){
-                    lab[i][j] = 0; //우선 0으로 바꾸고 나중에 바이러스 놓은 곳만 바꿔주기
+                   // lab[i][j] = 0; //우선 0으로 바꾸고 나중에 바이러스 놓은 곳만 바꿔주기
                     virus.add(new Position(i, j));
                 }
             }
@@ -45,7 +45,7 @@ public class BOJ17141 {
             int y = virus.get(curr).y;
             lab[x][y] = 3; //바이러스 둠
             go(curr+1, start+1);
-            lab[x][y] = 0;
+            lab[x][y] = 2;
             go(curr+1, start);
         }
     }
@@ -92,7 +92,7 @@ public class BOJ17141 {
         int curr = 0;
         for(int i=0; i<N; i++){
             for(int j=0; j<N; j++){
-                if(lab[i][j] != 1) {
+                if(lab[i][j] == 0) {
                     if(dist[i][j] == -1) return ; //바이러스를 어떻게 놓아도 모든 빈 칸에 바이러스를 퍼뜨릴 수 없는 경우
                     if(curr < dist[i][j]) curr = dist[i][j];
                 }
