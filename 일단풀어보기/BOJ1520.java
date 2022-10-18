@@ -40,14 +40,13 @@ public class BOJ1520 {
 
         if(visited[x][y]) return ;
         visited[x][y] = true;
-        
+
         for(int i=0; i<4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
 
             if(nx < 0 || ny <0 || nx >= N || ny >= M) continue;
-           // else if(visited[nx][ny]) System.out.println(D[nx][ny] = D[x][y] + 1;
-            else {
+            if(arr[x][y] > arr[nx][ny]) {
                 visited[nx][ny] = true;
                 D[nx][ny] = D[x][y] + 1;
                 dfs(nx, ny, curr+1);

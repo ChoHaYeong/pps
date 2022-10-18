@@ -57,8 +57,8 @@ public class BOJ16964 {
         }
 
         // 시작 정점은 1이기 때문에 가장 처음에 호출하는 함수는 dfs(1)이다. 
-
-        dfs(1);
+        for(int i=1; i<=N; i++)
+            if(!check[i]) dfs(i);
         System.out.println(1);
     }
 

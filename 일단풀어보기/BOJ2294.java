@@ -37,7 +37,7 @@ public class BOJ2294 {
                // System.out.print(D[j] + " ");
             }   
 
-            if(D[k] == 10001){
+            if(D[k] == 100001){
                 System.out.println(-1);
                 return ;
             }

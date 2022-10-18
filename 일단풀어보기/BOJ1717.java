@@ -48,7 +48,7 @@ public class BOJ1717 {
         if(x == parent[x])
             return x;
         else 
-            return find(parent[x]);
+            return parent[x] = find(parent[x]);
     }
 
     static boolean findParent(int x, int y) {

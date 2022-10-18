@@ -38,7 +38,6 @@ public class BOJ11660 {
             int y1 = Integer.parseInt(st.nextToken())-1;
             int x2 = Integer.parseInt(st.nextToken())-1;
             int y2 = Integer.parseInt(st.nextToken())-1;
-
             System.out.println((D[x2][y2]-D[x1][y1]+arr[x1][y1]) + " //");
         }
 
